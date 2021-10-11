@@ -11,45 +11,51 @@
 
 //①セッションを開始する
 session_start();
+$_SESSION["account_name"] = $_SESSION["user"];
 
-//②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-// if (/* ②の処理を書く */){
-// 	//③SESSIONの「error2」に「ログインしてください」と設定する。
-// 	//④ログイン画面へ遷移する。
-// }
-
-//⑤データベースへ接続し、接続情報を変数に保存する
-//⑥データベースで使用する文字コードを「UTF8」にする
-$db_name = 'zaiko2021_yse';
-$db_host = 'localhost';
-$db_port = '3306';
-$db_user = 'zaiko2021_yse';
-$db_password = '2021zaiko';
-
-$dsn = "mysql:dbname={$db_name};host={$db_host};charset=utf8;port={$db_port}";
-try {
-	$pdo = new PDO($dsn, $db_user, $db_password);
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-} catch (PDOException $e) {
-	echo "接続失敗: " . $e->getMessage();
-	exit;
+// ②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
+if ($_SESSION["login"] == false){
+// 	// ③SESSIONの「error2」に「ログインしてください」と設定する。
+	$_SESSION["error2"] = "ログインしてください";
+// 	// ④ログイン画面へ遷移する。
+	header("Location: login.php");
 }
 
+//⑤データベースへ接続し、接続情報を変数に保存する
+$dbname = "zaiko2021_yse";
+$host = "localhost";
+$charset = "UTF8";
+$user =  "zaiko2021_yse";
+$password = "2021zaiko";
+$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
+
+//⑥データベースで使用する文字コードを「UTF8」にする
+$dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
+
 //⑦書籍テーブルから書籍情報を取得するSQLを実行する。また実行結果を変数に保存する
+//データベースをPDOで接続してみる
+try
+{
+	$pdo = new PDO($dsn,$user,$password,$option);
+	// echo "SUCCESS";
+}catch(PDOException $e)
+{
+	die($e->getMessage());
+}
+//SQL
 $sql = "SELECT * FROM books";
-$stmt = $pdo->query($sql);
+
+//SQLを実行する
+$statement = $pdo->query($sql);
 
 ?>
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
 	<meta charset="UTF-8">
-	<title>書籍一覧1</title>
+	<title>書籍一覧</title>
 	<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
 </head>
-
 <body>
 	<div id="header">
 		<h1>書籍一覧</h1>
@@ -63,17 +69,20 @@ $stmt = $pdo->query($sql);
 				 * ⑧SESSIONの「success」にメッセージが設定されているかを判定する。
 				 * 設定されていた場合はif文の中に入る。
 				 */
-				// if(/* ⑧の処理を書く */){
-				//⑨SESSIONの「success」の中身を表示する。
-				// }
+				
+				 if(isset($_SESSION["success"])){
+				// // 	//⑨SESSIONの「success」の中身を表示する。
+				 	echo "<p>".@$_SESSION["success"]."</p>";
+				 	//var_dump($_SESSION["success"]);
+				 }
 				?>
 			</div>
-
+			
 			<!-- 左メニュー -->
 			<div id="left">
 				<p id="ninsyou_ippan">
 					<?php
-					echo @$_SESSION["account_name"];
+						echo @$_SESSION["account_name"];
 					?><br>
 					<button type="button" id="logout" onclick="location.href='logout.php'">ログアウト</button>
 				</p>
@@ -98,20 +107,32 @@ $stmt = $pdo->query($sql);
 						</tr>
 					</thead>
 					<tbody>
-						<!-- //⑩SQLの実行結果の変数から1レコードのデータを取り出す。レコードがない場合はループを終了する。
-						//⑪extract変数を使用し、1レコードのデータを渡す。 -->
-						<?php while ($book = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
-							<tr id="book">
-								<td id="check"><input type="checkbox" name="books[]" value="<?= $book['id'] ?>"></td>
-								<td id="id"><?= $book['id'] ?></td>
-								<td id="title"><?= $book['title'] ?></td>
-								<td id="author"><?= $book['author'] ?></td>
-								<td id="date"><?= $book['salesDate'] ?></td>
-								<td id="price"><?= $book['price'] ?></td>
-								<td id="stock"><?= $book['stock'] ?></td>
-							</tr>
-					
-						<?php endwhile ?>
+						<?php
+						//⑩SQLの実行結果の変数から1レコードのデータを取り出す。レコードがない場合はループを終了する。
+						while($books= $statement->fetch(PDO::FETCH_ASSOC)){
+							//⑪extract変数を使用し、1レコードのデータを渡す。
+							$book = array(
+								"id" => $books["id"],
+								"title" => $books["title"],
+								"author" => $books["author"],
+								"date" => $books["salesDate"],
+								"price" => $books["price"],
+								"stock" => $books["stock"]
+							);
+							extract($book);
+
+							echo "<tr id='book'>";
+							echo "<td id='check'><input type='checkbox' name='books[]' value=".$books["id"]."></td>";
+							echo "<td id='id'>".$id."</td>";
+							echo "<td id='title'>".$title."</td>";
+							echo "<td id='author'>".$author."</td>";
+							echo "<td id='date'>".$date."</td>";
+							echo "<td id='price'>".$price."</td>";
+							echo "<td id='stock'>".$stock."</td>";
+
+							echo "</tr>";
+						}
+						?>
 					</tbody>
 				</table>
 			</div>
@@ -121,5 +142,4 @@ $stmt = $pdo->query($sql);
 		<footer>株式会社アクロイト</footer>
 	</div>
 </body>
-
 </html>
