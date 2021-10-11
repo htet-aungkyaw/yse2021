@@ -46,7 +46,7 @@ $stmt = $pdo->query($sql);
 
 <head>
 	<meta charset="UTF-8">
-	<title>書籍一覧</title>
+	<title>書籍一覧1</title>
 	<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
 </head>
 
