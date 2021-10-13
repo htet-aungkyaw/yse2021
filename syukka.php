@@ -13,15 +13,18 @@
  * ①session_status()の結果が「PHP_SESSION_NONE」と一致するか判定する。
  * 一致した場合はif文の中に入る。
  */
-if (/* ①の処理を行う */) {
-	//②セッションを開始する
+if ( session_status () == PHP_SESSION_NONE ) {
+	//②セッションの开始する
+	session_start ();
 }
 
 //③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-if (/* ③の処理を書く */){
-	//④SESSIONの「error2」に「ログインしてください」と設定する。
-	//⑤ログイン画面へ遷移する。
-}
+if ($_SESSION["login"] == false){
+	// 	// ③SESSIONの「error2」に「ログインしてください」と設定する。
+		$_SESSION["error2"] = "ログインしてください";
+	// 	// ④ログイン画面へ遷移する。
+		header("Location: login.php");
+	}
 
 //⑥データベースへ接続し、接続情報を変数に保存する
 $dbname = "zaiko2021_yse";
@@ -59,10 +62,9 @@ function getId($id,$con){
 	$sql = "SELECT * FROM books WHERE id = '{$id}'";
     $statement = $con->query($sql);
     
-
 	//⑫実行した結果から1レコード取得し、returnで値を返す。
-	$statement->fetch(PDO::FETCH_ASSOC);
-	return $statement->execute($sql);
+	$row = $statement->fetch(PDO::FETCH_ASSOC);
+	return $row;
 }
 ?>
 <!DOCTYPE html>
@@ -88,7 +90,7 @@ function getId($id,$con){
 </div>
 
 <form action="syukka_kakunin.php" method="post">
-	<div id="pagebody">
+<div id="pagebody">
 		<!-- エラーメッセージ -->
 		<div id="error">
 		<?php
@@ -96,9 +98,9 @@ function getId($id,$con){
 		 * ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
 		 * 設定されていた場合はif文の中に入る。
 		 */ 
-		if(/* ⑬の処理を書く */){
+		// if(/* ⑬の処理を書く */){
 			//⑭SESSIONの「error」の中身を表示する。
-		}
+		// }
 		?>
 		</div>
 		<div id="center">
