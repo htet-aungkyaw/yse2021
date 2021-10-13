@@ -27,131 +27,134 @@ if ( session_status () == PHP_SESSION_NONE ) {
 // }
 
 //⑥データベースへ接続し、接続情报oo変数に保存する
-$ dbname = "zaiko2021_yse" ;
-$主机= “本地主机”；
-$ charset = "UTF8" ;
-$ user =   "zaiko2021_yse" ;
-$ password = "2021zaiko" ;
-$ option = [ PDO :: ATTR_ERRMODE => PDO :: ERRMODE_EXCEPTION ];
+$dbname = "zaiko2021_yse";
+$host = "localhost";
+$charset = "UTF8";
+$user =  "zaiko2021_yse";
+$password = "2021zaiko";
+$option = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION];
 
-//⑦データベースで使用する文字コードo「UTF8」にする
-$ dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}" ;
-尝试
+//⑥データベースで使用する文字コードを「UTF8」にする
+$dsn = "mysql:dbname={$dbname};host={$host};charset={$charset}";
+
+//⑦書籍テーブルから書籍情報を取得するSQLを実行する。また実行結果を変数に保存する
+//データベースをPDOで接続してみる
+try
 {
-	$ pdo =新 PDO ( $ dsn , $ user , $ password , $ option );
-	// echo "成功";
-} catch ( PDOException  $ e )
+	$pdo = new PDO($dsn,$user,$password,$option);
+	// echo "SUCCESS";
+}catch(PDOException $e)
 {
-	死( $ e -> getMessage ());
+	die($e->getMessage());
 }
 
 
 
 //⑧POST「书」値が空か甄别するの场合はif文の中に入る。
-if (空( $ _POST [ "books" ])){
+if (empty($_POST["books"])){
 	//⑨SESSIONの「成功」に「入荷する商品が选妃されていません」と设定する。
-	$ _SESSION [ "success" ] = "入荷する商品が选妃されていません" ;
+	$_SESSION["success"] = "入荷する商品が选妃されていません" ;
 	//⑩在库一覧画面へ迁移する。
-	header ( "位置：zaiko_ichiran.php" );
+	header("Location：zaiko_ichiran.php");
 }
 //var_dump($_POST);
-函数 getId ( $ id , $ con ){
+function getId($id,$con){
 	/* 
-	 * ⑪书籍oo取得するSQL∀作成する行する。
-	 * その际にWHEREでメソッドの引数の$idに一致性する书籍のみする。
-	 * SQLの実行结果oo変数に保存する。
+	 * ⑪書籍を取得するSQLを作成する実行する。
+	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
+	 * SQLの実行結果を変数に保存する。
 	 */
-	$ id = htmlspecialchars ( $ id );
-	$ sql = "SELECT * FROM books WHERE id = {$id} " ;
-	$语句= $ con ->查询( $ sql );
-	//⑫実行した结果から1レコード取得し、返回で値oo返す。
-	$ items =   $ statement -> fetch ( PDO :: FETCH_ASSOC );
-	返回 $项目；
+	$sql = "SELECT * FROM books";
+	$id = htmlspecialchars($id);
+	$sql = "SELECT * FROM books WHERE id = '{$id}'";
+    $statement = $con->query($sql);
+    
+	//⑫実行した結果から1レコード取得し、returnで値を返す。
+	$row = $statement->fetch(PDO::FETCH_ASSOC);
+	return $row;
 }
-
 ?>
-<!DOCTYPE html >
-< html  lang =" ja " >
-<头>
-	< meta  http-equiv =" Content-Type " content =" text/html;charset=UTF-8 " >
-	< title >入荷</ title >
-	< link  rel =" stylesheet " href =" css/ichiran.css " type =" text/css " />
-</头>
-<身体>
-	<!-- ヘッダ -->
-	< div  id ="标题" >
-		< h1 >入荷</ h1 >
-	</ div >
 
-	<!-- メニュー -->
-	< div  id ="菜单" >
-		<导航>
-			< ul >
-				<锂> <一个 HREF = “ zaiko_ichiran.php？页= 1 ” >书籍一覧</一> </李>
-			</ ul >
-		</导航>
-	</ div >
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>出荷</title>
+<link rel="stylesheet" href="css/ichiran.css" type="text/css" />
+</head>
+<body>
+<!-- ヘッダ -->
+<div id="header">
+	<h1>出荷</h1>
+</div>
 
-	< form  action =" nyuka_kakunin.php "方法=" post " >
-		< div  id ="页面主体" >
-			<!-- エラーメッセージ -->
-			< div  id ="错误" >
-			<?php
-			/*
-			 * ⑬SESSIONの「错误」にメッセージが设定されているかo识别する。
-			 *されていた设置场合はif文の中に入る。
-			 */ 
-			var_dump ( $ _POST [ "books" ]);
-			
-			
-			// if(/* ⑬の处理oo书く */){
-			// //⑭SESSIONの「错误」の中身oo表示する。
-			// }
-			?>
-			</ div >
-			< div  id ="居中" >
-				<表>
-					< THEAD >
-						< tr >
-							< th  id =" id " > ID </ th >
-							< th  id =" book_name " >书名</ th >
-							< th  id ="作者" >作者名</ th >
-							< th  id =" salesDate " >発売日</ th >
-							< th  id =" itemPrice " >金额(円) </ th >
-							< th  id =" stock " >在库数</ th >
-							< th  id =" in " >入荷数</ th >
-						</ tr >
-					</ THEAD >
-					<?php 
-					// /*
-					// * ⑮POSTの「书」から一つずつ値hoo取り出し、変数に保存する。
-					// */
-					$ ids = $ _POST [ “书籍” ];
-					//var_dump($_POST["books"]);
-    				 foreach ( $ ids 为 $ id ):
-    				// ⑯「getId」关数oo呼び出し、変数に戻り値oo入れる。その引数に⑮の处理で取得した値と⑥のDBの接続情报すす。	
-					$ selectedBook = getId ( $ id , $ pdo );
-					
-					?>
-					< input  type =" hidden " value =" <?php echo /* ⑰ ⑯の戻り値からidoo取り出し、设定する */ $ selectedBook [ "id" ]; ?> " name =" books[] " >  	
-					< tr >
-						< td > <?php  echo 	/* ⑱ ⑯の戻り値からidoo取り出し、表示する */  $ selectedBook [ "id" ]; ?> </ td >
-						< td > <?php  echo 	/* ⑲ ⑯の戻り値からtitlehoo取り出し、表示する */ $ selectedBook [ "title" ]; ?> </ td >
-						< td > <?php  echo 	/* ⑳ ⑯の戻り値からauthoro取り出し、表示する */ $ selectedBook [ "author" ]; ?> </ td >
-						< td > <?php  echo 	/* ㉑ ⑯の戻り値からsalesDateο取り出し、表示する */ $ selectedBook [ "salesDate" ]; ?> </ td >
-						< td > <?php  echo 	/* ㉒ ⑯の戻り値からpriceo取り出し、表示する */ $ selectedBook [ "price" ]; ?> </ td >
-						< td > <?php  echo 	/* ㉓ ⑯の戻り値からstocko取り出し、表示する */ $ selectedBook [ "stock" ]; ?> </ td >
-						< td > < input  type =' text ' name =' stock[] ' size =' 5 ' maxlength =' 11 ' required > </ td >
-					</ tr >
-					<?php  endforeach  ?>
-				</表>
-				< button  type =" submit " id =" kakutei " formmethod =" POST " name =" decision " value =" 1 " >确定</ button >
-			</ div >
-		</ div >
-	</表单>
-	<!-- フッター -->
-	< div  id ="页脚" >
-		<页脚>株式会社アクロイト</页脚>
-	</ div >
-</正文>
-</ html >
+<!-- メニュー -->
+<div id="menu">
+	<nav>
+		<ul>
+			<li><a href="zaiko_ichiran.php?page=1">書籍一覧</a></li>
+		</ul>
+	</nav>
+</div>
+
+<form action="nyuka_kakunin.php" method="post">
+	<div id="pagebody">
+		<!-- エラーメッセージ -->
+		<div id="error">
+		<?php
+		/*
+		 * ⑬SESSIONの「error」にメッセージが設定されているかを判定する。
+		 * 設定されていた場合はif文の中に入る。
+		 */ 
+		// if(/* ⑬の処理を書く */){
+			//⑭SESSIONの「error」の中身を表示する。
+		// }
+		?>
+		</div>
+		<div id="center">
+			<table>
+				<thead>
+					<tr>
+						<th id="id">ID</th>
+						<th id="book_name">書籍名</th>
+						<th id="author">著者名</th>
+						<th id="salesDate">発売日</th>
+						<th id="itemPrice">金額(円)</th>
+						<th id="stock">在庫数</th>
+						<th id="in">出荷数</th>
+					</tr>
+				</thead>
+				<?php 
+				/*
+				 * ⑮POSTの「books」から一つずつ値を取り出し、変数に保存する。
+				 */
+				$ids = $_POST["books"];
+
+				foreach(/* ⑮の処理を書く */$ids as $id){
+					// ⑯「getId」関数を呼び出し、変数に戻り値を入れる。その際引数に⑮の処理で取得した値と⑥のDBの接続情報を渡す。
+					$selectedBook = getId($id,$pdo);
+				?>
+				<input type="hidden" value="<?php echo	/* ⑰ ⑯の戻り値からidを取り出し、設定する */$selectedBook["id"];?>" name="books[]">
+				<tr>
+					<td><?php echo	/* ⑱ ⑯の戻り値からidを取り出し、表示する */$selectedBook["id"];?></td>
+					<td><?php echo	/* ⑲ ⑯の戻り値からtitleを取り出し、表示する */$selectedBook["title"];?></td>
+					<td><?php echo	/* ⑳ ⑯の戻り値からauthorを取り出し、表示する */$selectedBook["author"];?></td>
+					<td><?php echo	/* ㉑ ⑯の戻り値からsalesDateを取り出し、表示する */$selectedBook["salesDate"];;?></td>
+					<td><?php echo	/* ㉒ ⑯の戻り値からpriceを取り出し、表示する */$selectedBook["price"];?></td>
+					<td><?php echo	/* ㉓ ⑯の戻り値からstockを取り出し、表示する */$selectedBook["stock"];?></td>
+					<td><input type='text' name='stock[]' size='5' maxlength='11' required></td>
+				</tr>
+				<?php
+				}
+				?>
+			</table>
+			<button type="submit" id="kakutei" formmethod="POST" name="decision" value="1">確定</button>
+		</div>
+	</div>
+</form>
+<!-- フッター -->
+<div id="footer">
+	<footer>株式会社アクロイト</footer>
+</div>
+</body>
+</html>
