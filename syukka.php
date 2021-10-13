@@ -69,7 +69,7 @@ function getId($id,$con){
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>出荷</title>
+<title>入力</title>
 <link rel="stylesheet" href="css/ichiran.css" type="text/css" />
 </head>
 <body>
