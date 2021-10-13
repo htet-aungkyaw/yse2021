@@ -85,7 +85,7 @@ function getId($id,$con){
 <body>
 <!-- ヘッダ -->
 <div id="header">
-	<h1>出荷</h1>
+	<h1>入荷</h1>
 </div>
 
 <!-- メニュー -->
