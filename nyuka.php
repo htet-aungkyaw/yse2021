@@ -26,6 +26,7 @@ if ($_SESSION["login"] == false){
 		$_SESSION["error2"] = "ログインしてください";
 	// 	// ④ログイン画面へ遷移する。
 		header("Location:login.php");
+		exit;
 	}
 
 //⑥データベースへ接続し、接続情报oo変数に保存する
