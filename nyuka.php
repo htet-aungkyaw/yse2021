@@ -18,13 +18,15 @@ if ( session_status () == PHP_SESSION_NONE ) {
 	session_start ();
 }
 
-
-
-//③SESSIONの「登录​​」フラグがfalseか判定する。「登录」フラグがfalseの场合はif文の中に入る。
-// if (/* ③の处理oo书く */){
-// //④SESSIONの「error2」に「ログインしてください」と设定する。
-// //⑤ログイン画面へ迁移する。
-// }
+var_dump($_SESSION);
+exit;
+//③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
+if ($_SESSION["login"] == false){
+	// 	// ③SESSIONの「error2」に「ログインしてください」と設定する。
+		$_SESSION["error2"] = "ログインしてください";
+	// 	// ④ログイン画面へ遷移する。
+		header("Location:login.php");
+	}
 
 //⑥データベースへ接続し、接続情报oo変数に保存する
 $dbname = "zaiko2021_yse";
@@ -121,7 +123,7 @@ function getId($id,$con){
 						<th id="salesDate">発売日</th>
 						<th id="itemPrice">金額(円)</th>
 						<th id="stock">在庫数</th>
-						<th id="in">出荷数</th>
+						<th id="in">入荷数</th>
 					</tr>
 				</thead>
 				<?php 
