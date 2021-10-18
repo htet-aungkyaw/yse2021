@@ -52,10 +52,10 @@ try
 
 //⑧POST「书」値が空か甄别するの场合はif文の中に入る。
 if (empty($_POST["books"])){
-	//⑨SESSIONの「成功」に「入荷する商品が选妃されていません」と设定する。
-	$_SESSION["success"] = "入荷する商品が选妃されていません" ;
+	//⑨SESSIONの「成功」に「入荷する商品が選択されていません」と设定する。
+	$_SESSION["success"] = "入出荷する商品が選択されていません" ;
 	//⑩在库一覧画面へ迁移する。
-	header("Location：zaiko_ichiran.php");
+	header("Location:zaiko_ichiran.php");
 }
 //var_dump($_POST);
 function getId($id,$con){
