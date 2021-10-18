@@ -18,6 +18,8 @@ if ( session_status () == PHP_SESSION_NONE ) {
 	session_start ();
 }
 
+var_dump($_SESSION);
+exit;
 //③SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
 if ($_SESSION["login"] == false){
 	// 	// ③SESSIONの「error2」に「ログインしてください」と設定する。
