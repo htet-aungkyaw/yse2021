@@ -33,7 +33,8 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 	
 }else{
 	$error_message = '名前が未入力です。';
-}}
+}
+}
 
 	
 	// if (/* ③の処理を書く */) {
@@ -72,6 +73,9 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 // 	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
 // 	//⑭SESSIONの「error2」にnullを入れる。
 // }
+if (isset($_REQUEST['check'])){
+	echo "null";
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -86,9 +90,10 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 		<?php 
 		//⑮エラーメッセージの変数に入っている値を表示する 
 		//echo "<div id='error'>", /* ⑮の変数を書く */, "</div>";
-		
+		echo "<div id='error>","ユーザー名かパスワードがまちがっています。","</div>";
 		//⑯メッセージの変数に入っている値を表示する 
 		//echo "<div id='msg'>", /* ⑯の変数を書く */, "</div>"; 
+		echo "<div id='msg'>","ログインしてください。","</div>";
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>
