@@ -10,5 +10,14 @@ if(isset($_SESSION["user"])) {
 unset($_SESSION["user"]);
 //③ログイン画面へ遷移する。
 header("Location: login.php");
+session_start();
+
+$_SESSION = array();
+
+session_destroy();
+
+header("location: login.php");
+
+exit;
 }
 ?>
