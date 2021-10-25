@@ -1,6 +1,3 @@
-<!-- bishnu 
-test -->
-
 <?php
 /* 
 【機能】
@@ -9,59 +6,41 @@ test -->
 【エラー一覧（エラー表示：発生条件）】
 なし
 */
-
 //①セッションを開始する
 session_start();
-
-function getByid($id,$con){
-	/* 
+function getByid($id, $con)
+{
+    /* 
 	 * ②書籍を取得するSQLを作成する実行する。
 	 * その際にWHERE句でメソッドの引数の$idに一致する書籍のみ取得する。
 	 * SQLの実行結果を変数に保存する。
 	 */
-	$sql= "select * from books where id = {id}";
-		
-$pdo = new PDO ($dsn,$user,$password,$option);
-$stmt = "$con->query($sql)";
-	//③実行した結果から1レコード取得し、returnで値を返す。
-	$items =  $statement->fetch(PDO::FETCH_ASSOC);
-	return $items;
+    $sql = "SELECT * FROM books WHERE id = {$id}";
+    $stmt = $con->query($sql);
+    //③実行した結果から1レコード取得し、returnで値を返す。
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
-function updateByid($id,$con,$total){
-	/*
+function updateByid($id, $con, $total)
+{
+    /*
 	 * ④書籍情報の在庫数を更新するSQLを実行する。
 	 * 引数で受け取った$totalの値で在庫数を上書く。
 	 * その際にWHERE句でメソッドの引数に$idに一致する書籍のみ取得する。
 	 */
-	$sql = "UPDATE books SET stock={$total} WHERE id={$id}";
+    $sql = "UPDATE books SET stock={$total} WHERE id={$id}";
     $con->query($sql);
 }
-//example
-	// $sql = "UPDATE items books 
-	// title = :title,
-	// price = :price,
-	// stock = :stock
-	// WHERE id = :id;";
-	// $stmt = $pdo->prepare($sql);
-	// return $stmt->execute($data);
-	$id = htmlspecialchars($id);
-	// $total
-	$sql = "UPDATE books set stock = :stock where id = :id";
-	$sql = "SELECT * FROM books WHERE id = {$id} ";
-	$stmt= "$con->prepare($sql)";
-	return $stmt->execute();
-
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
- (/* ⑤の処理を書く */$_SESSION["login"] == false)	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-	($_SESSION["login"] == error2);
+	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
 	//⑦ログイン画面へ遷移する。
 	if (empty($_SESSION['login'])) {
 		$_SESSION['error2'] = 'ログインしてください';
 		header('Location: login.php');
 		exit;
 	}
+
+
 	//⑧データベースへ接続し、接続情報を変数に保存する
 //⑨データベースで使用する文字コードを「UTF8」にする
 $db_name = 'zaiko2021_yse';
