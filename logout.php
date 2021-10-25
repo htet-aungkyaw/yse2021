@@ -7,7 +7,8 @@
 session_start();
 //②セッションを削除する。
 if(isset($_SESSION["user"])) {
-unset($_SESSION["user"]);
+unset($_SESSION["id"]);
+unset($_SESSION["name"]);
 //③ログイン画面へ遷移する。
 header("Location: login.php");
 session_start();
