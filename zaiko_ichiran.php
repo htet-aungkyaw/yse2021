@@ -96,8 +96,8 @@ $statement = $pdo->query($sql);
 
 				<!-- 書籍一覧の表示 -->
 				<table>
-					<thead>
-						<tr>
+					<thead> 
+						<tr> 
 							<th id="check"></th>
 							<th id="id">ID</th>
 							<th id="book_name">書籍名</th>
