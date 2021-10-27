@@ -21,6 +21,7 @@ if ($_SESSION["login"] == false){
 // 	// ④ログイン画面へ遷移する。
 	header("Location: login.php");
 }
+$_SESSION["account_name"] = $_SESSION["user"];
 
 //⑤データベースへ接続し、接続情報を変数に保存する
 $dbname = "zaiko2021_yse";
