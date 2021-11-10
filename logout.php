@@ -9,7 +9,7 @@ session_start();
 if(isset($_SESSION["login"])) {
 unset($_SESSION["user"]);
 unset($_SESSION["login"]);
-}
+}						
 //③ログイン画面へ遷移する。
 header("Location: login.php");
 exit;

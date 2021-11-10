@@ -47,7 +47,7 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 
 
 //⑦名前が入力されているか判定する。入力されていた場合はif文の中に入る
- if (isset($name)) {
+ if ($name) {
  $userAdmin = "yse";
  $passwordAdmin = "2021";
 	if($name == $userAdmin && $password == $passwordAdmin){
