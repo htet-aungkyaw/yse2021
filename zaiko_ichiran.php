@@ -12,7 +12,7 @@
 
 //①セッションを開始する
 session_start();
-$_SESSION["account_name"] = $_SESSION["user"];
+
 
 // ②SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
 if ($_SESSION["login"] == false){
@@ -21,6 +21,7 @@ if ($_SESSION["login"] == false){
 // 	// ④ログイン画面へ遷移する。
 	header("Location: login.php");
 }
+$_SESSION["account_name"] = $_SESSION["user"];
 
 //⑤データベースへ接続し、接続情報を変数に保存する
 $dbname = "zaiko2021_yse";
@@ -96,8 +97,8 @@ $statement = $pdo->query($sql);
 
 				<!-- 書籍一覧の表示 -->
 				<table>
-					<thead>
-						<tr>
+					<thead> 
+						<tr> 
 							<th id="check"></th>
 							<th id="id">ID</th>
 							<th id="book_name">書籍名</th>

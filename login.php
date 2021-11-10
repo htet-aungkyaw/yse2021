@@ -16,6 +16,8 @@ session_start();
 //①名前とパスワードを入れる変数を初期化する
 $name = "";
 $password = "";
+$mg = "";
+$errormg= "";
 
 /*
  * ②ログインボタンが押されたかを判定する。
@@ -32,8 +34,9 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 	
 	
 }else{
-	$error_message = '名前が未入力です。';
-}}
+	$error_message[1] = '名前かパスワードが未入力です。';
+}
+}
 
 	
 	// if (/* ③の処理を書く */) {
@@ -54,7 +57,7 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 		header("Location: zaiko_ichiran.php");
 	}
 	else{
-		$error_message = "ユーザー名かパスワードがまちがっています。";
+		$error_message[2] = "ユーザー名かパスワードがまちがっています。";
 	}
 }
 // 	//⑧名前に「yse」、パスワードに「2021」と設定されているか確認する。設定されていた場合はif文の中に入る
@@ -72,6 +75,10 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 // 	//⑬SESSIONの「error2」の値をエラーメッセージを入れる変数に設定する。
 // 	//⑭SESSIONの「error2」にnullを入れる。
 // }
+if(isset($_SESSION['error2'])){
+	$error_message[3] = $_SESSION['error2'];
+	$_SESSION['error2'] = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -80,22 +87,26 @@ if (isset($_POST["decision"]) && $_POST["decision"] == 1) {
 <title>ログイン</title>
 <link rel="stylesheet" href="css/login.css" type="text/css" />
 </head>
+
 <body id="login">
 	<div id="main">
 		<h1>ログイン</h1>
 		<?php 
-		//⑮エラーメッセージの変数に入っている値を表示する 
-		//echo "<div id='error'>", /* ⑮の変数を書く */, "</div>";
+		if(!empty($error_message))
+		{
+			if(!empty($error_message[1])) $error = $error_message[1] ;
+			if(!empty($error_message[2])) $error = $error_message[2];
+			if(!empty($error_message[3])) $error = $error_message[3];
+			echo "<div id='error'>".@$error."</div>";
+		}
 		
-		//⑯メッセージの変数に入っている値を表示する 
-		//echo "<div id='msg'>", /* ⑯の変数を書く */, "</div>"; 
 		?>
 		<form action="login.php" method="post" id="log">
 			<p>
-				<input type='text' name="name" size='5' placeholder="Username">
+				<input type='text' name="name" size='6' placeholder="Username">
 			</p>
 			<p>
-				<input type='password' name='pass' size='5' maxlength='20'
+				<input type='password' name='pass' size='6' maxlength='25'
 					placeholder="Password">
 			</p>
 			<p>
