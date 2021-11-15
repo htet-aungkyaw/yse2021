@@ -32,16 +32,25 @@ function updateByid($id, $con, $total)
 }
 
 //⑤SESSIONの「login」フラグがfalseか判定する。「login」フラグがfalseの場合はif文の中に入る。
-	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
-	//⑦ログイン画面へ遷移する。
-	if (empty($_SESSION['login'])) {
-		$_SESSION['error2'] = 'ログインしてください';
-		header('Location: login.php');
-		exit;
-	}
+// if (/* ⑤の処理を書く */){
+// 	//⑥SESSIONの「error2」に「ログインしてください」と設定する。
+// 	//⑦ログイン画面へ遷移する。
+// }
+if (empty($_SESSION['login'])) {
+    $_SESSION['error2'] = 'ログインしてください';
+    header('Location: login.php');
+    exit;
+}
+if (empty($_POST["books"])) {
+	//⑨SESSIONの「success」に「出荷する商品が選択されていません」と設定する。
+	//⑩在庫一覧画面へ遷移する。
+	$_SESSION["success"] = "入荷する商品が選択されていません";
+	header("Location: zaiko_ichiran.php");
+	exit;
+}
 
 
-	//⑧データベースへ接続し、接続情報を変数に保存する
+//⑧データベースへ接続し、接続情報を変数に保存する
 //⑨データベースで使用する文字コードを「UTF8」にする
 $db_name = 'zaiko2021_yse';
 $db_host = 'localhost';
