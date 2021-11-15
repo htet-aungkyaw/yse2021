@@ -115,6 +115,10 @@ function fetchBooks($ids, $pdo)
 				// if(/* ⑬の処理を書く */){
 				// 	//⑭SESSIONの「error」の中身を表示する。
 				// }
+				if (@$_SESSION["error"]) {
+					//⑭SESSIONの「error」の中身を表示する。
+					echo $_SESSION["error"];
+				}
 				?>
 			</div>
 			<div id="center">
