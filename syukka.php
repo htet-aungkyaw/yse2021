@@ -1,4 +1,3 @@
-<!-- roni file -->
 <?php
 /* 
 【機能】
@@ -157,3 +156,4 @@ function fetchBooks($ids, $pdo)
 </body>
 
 </html>
+© 2021 GitHub, Inc.
